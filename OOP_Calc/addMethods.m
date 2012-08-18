@@ -87,7 +87,7 @@
 //
 // 演算子入力に対するメソッド．
 /*--------------------------------------------*/
-- (void)setOperation:(NSNumber *)value{
+- (void)setOperation:(NSString *)value{
     
 }
 
@@ -111,17 +111,6 @@
 /*--------------------------------------------*/
 - (NSString *)turnSign{
     return @"0";    
-}
-
-/*--------------------------------------------*/
-// turnSign
-// 引数:temp,num
-// 返数:void
-//
-// 数字列tempをarg(num)に保存するメソッド．
-/*--------------------------------------------*/
-- (void)substituteViewValue:(NSString *)temp ForArg:(NSNumber *)num{
-    
 }
 
 #pragma mark - その他

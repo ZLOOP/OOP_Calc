@@ -241,6 +241,9 @@
                         </subviews>
                         <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     </view>
+                    <connections>
+                        <outlet property="valueViewLabrl" destination="hk8-oG-OPt" id="Hkp-zF-R8I"/>
+                    </connections>
                 </viewController>
             </objects>
         </scene>

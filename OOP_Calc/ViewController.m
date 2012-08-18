@@ -19,6 +19,7 @@
 
 - (void)viewDidUnload
 {
+    valueViewLabrl = nil;
     [super viewDidUnload];
     // Release any retained subviews of the main view.
 }

@@ -78,6 +78,29 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		E920E35C15DF7928006C1E47 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				E954DA3615C81E1A00BAB016 /* ViewController.h */,
+				E954DA3715C81E1A00BAB016 /* ViewController.m */,
+			);
+			name = ViewController;
+			sourceTree = "<group>";
+		};
+		E920E35E15DF794F006C1E47 /* Methods */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Methods;
+			sourceTree = "<group>";
+		};
+		E920E35F15DF7976006C1E47 /* MethodsTests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = MethodsTests;
+			sourceTree = "<group>";
+		};
 		E954DA1215C81E1A00BAB016 = {
 			isa = PBXGroup;
 			children = (
@@ -113,9 +136,9 @@
 			children = (
 				E954DA3015C81E1A00BAB016 /* AppDelegate.h */,
 				E954DA3115C81E1A00BAB016 /* AppDelegate.m */,
+				E920E35E15DF794F006C1E47 /* Methods */,
+				E920E35C15DF7928006C1E47 /* ViewController */,
 				E954DA3315C81E1A00BAB016 /* MainStoryboard.storyboard */,
-				E954DA3615C81E1A00BAB016 /* ViewController.h */,
-				E954DA3715C81E1A00BAB016 /* ViewController.m */,
 				E954DA2815C81E1A00BAB016 /* Supporting Files */,
 			);
 			path = OOP_Calc;
@@ -137,6 +160,7 @@
 			children = (
 				E954DA4B15C81E1B00BAB016 /* OOP_CalcTests.h */,
 				E954DA4C15C81E1B00BAB016 /* OOP_CalcTests.m */,
+				E920E35F15DF7976006C1E47 /* MethodsTests */,
 				E954DA4615C81E1A00BAB016 /* Supporting Files */,
 			);
 			path = OOP_CalcTests;
@@ -434,6 +458,7 @@
 				E954DA5215C81E1B00BAB016 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		E954DA5315C81E1B00BAB016 /* Build configuration list for PBXNativeTarget "OOP_CalcTests" */ = {
 			isa = XCConfigurationList;
@@ -442,6 +467,7 @@
 				E954DA5515C81E1B00BAB016 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

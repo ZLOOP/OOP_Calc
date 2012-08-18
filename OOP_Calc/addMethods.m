@@ -119,16 +119,16 @@
 - (NSString *)setOperation:(NSString *)value{
     NSString *temp = nil;
     switch (STATE) {
-        case initialState://
+        case initialState:
             break;
             
-        case arg1State://
+        case arg1State:
             break;
             
-        case opeState://
+        case opeState:
             break;
             
-        case arg2State://
+        case arg2State:
             temp =[self calculation];
             [self resetFlags:[NSNumber numberWithDouble:[temp doubleValue]]]; //FIXME:double型だと桁数が足りない可能性有り
             break;
@@ -150,7 +150,7 @@
 // 小数点入力に対するメソッド．
 /*--------------------------------------------*/
 - (NSString *)setPoint{
-    return @"0";    
+    return @"0";
 }
 
 /*--------------------------------------------*/
@@ -158,15 +158,39 @@
 // 引数:なし
 // 返数:NSString *
 //
-// 小数点入力に対するメソッド．
+// +/-入力に対するメソッド．
 /*--------------------------------------------*/
 - (NSString *)turnSign{
-    return @"0";    
+    NSNumber *temp;
+    switch (STATE) {
+        case initialState://
+            temp = nil;
+            break;
+            
+        case arg1State://
+            arg1 = @([arg1 doubleValue] * (-1));
+            temp = arg1;
+            break;
+            
+        case opeState://
+            temp = nil;
+            break;
+            
+        case arg2State://
+            arg2 = @([arg2 doubleValue] * (-1));
+            temp = arg2;
+            break;
+            
+        default:
+            break;
+    }
+
+    return [temp stringValue];
 }
 
 #pragma mark - その他
 /*--------------------------------------------*/
-// turnSign
+// calculation
 // 引数:なし
 // 返数:NSString *
 //

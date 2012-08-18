@@ -98,7 +98,8 @@
 }
 
 - (IBAction)signButton_down:(id)sender {
-    valueViewLabrl.text = [_addMethods turnSign];
+    NSString *temp = [_addMethods turnSign];
+    if(temp != nil)valueViewLabrl.text =temp;
 }
 
 - (IBAction)pointButton_down:(id)sender {

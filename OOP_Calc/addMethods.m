@@ -19,7 +19,7 @@
     
     NSNumber *arg1;     //数字列1用
     NSNumber *arg2;     //数字列2用
-    NSNumber *ope;      //演算子用
+    NSString *ope;      //演算子用
 }
 
 #pragma mark - 初期化
@@ -77,7 +77,36 @@
 // 数字入力に対するメソッド．
 /*--------------------------------------------*/
 - (NSString *)setNumber:(NSNumber *)value{
-    return @"0";
+    NSString *temp;
+    switch (STATE) {
+        case initialState://arg1にvalueで上書き
+            arg1 = value;
+            temp = [arg1 stringValue];
+            STATE = arg1State;
+            break;
+        case arg1State://arg1とvalueを結合
+            temp = [[arg1 stringValue] stringByAppendingString:[value stringValue]];
+            arg1 = [NSNumber numberWithDouble:[temp doubleValue]]; //FIXME:double型だと，桁数が足りない可能性有り
+            temp = [arg1 stringValue];
+            STATE = arg1State;
+            break;
+            
+        case opeState://arg2にvalueで上書き
+            arg2 = value;
+            temp = [arg2 stringValue];
+            STATE = arg2State;
+            break;
+        case arg2State://arg2とvalueを結合
+            temp = [[arg2 stringValue] stringByAppendingString:[value stringValue]];
+            arg2 = [NSNumber numberWithDouble:[temp doubleValue]]; //FIXME:double型だと，桁数が足りない可能性有り
+            temp = [arg2 stringValue];
+            STATE = arg2State;
+            break;
+            
+        default:
+            break;
+    }
+    return temp;
 }
 
 /*--------------------------------------------*/
@@ -87,8 +116,30 @@
 //
 // 演算子入力に対するメソッド．
 /*--------------------------------------------*/
-- (void)setOperation:(NSString *)value{
-    
+- (NSString *)setOperation:(NSString *)value{
+    NSString *temp = nil;
+    switch (STATE) {
+        case initialState://
+            break;
+            
+        case arg1State://
+            break;
+            
+        case opeState://
+            break;
+            
+        case arg2State://
+            temp =[self calculation];
+            [self resetFlags:[NSNumber numberWithDouble:[temp doubleValue]]]; //FIXME:double型だと桁数が足りない可能性有り
+            break;
+            
+        default:
+            break;
+    }
+    ope = value;
+    [self resetFlags:@0];
+    STATE = opeState;
+    return temp;
 }
 
 /*--------------------------------------------*/

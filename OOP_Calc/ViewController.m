@@ -78,19 +78,23 @@
 }
 
 - (IBAction)addButton_down:(id)sender {
-    [_addMethods setOperation:@"+"];
+    NSString *temp = [_addMethods setOperation:@"+"];
+    if(temp != nil)valueViewLabrl.text =temp;
 }
 
 - (IBAction)subButton_down:(id)sender {
-    [_addMethods setOperation:@"-"];
+    NSString *temp = [_addMethods setOperation:@"-"];
+    if(temp != nil)valueViewLabrl.text =temp;
 }
 
 - (IBAction)mulButton_down:(id)sender {
-    [_addMethods setOperation:@"*"];
+    NSString *temp = [_addMethods setOperation:@"*"];
+    if(temp != nil)valueViewLabrl.text =temp;
 }
 
 - (IBAction)divButton_down:(id)sender {
-    [_addMethods setOperation:@"/"];
+    NSString *temp = [_addMethods setOperation:@"/"];
+    if(temp != nil)valueViewLabrl.text =temp;
 }
 
 - (IBAction)signButton_down:(id)sender {

@@ -13,7 +13,7 @@
 
 #pragma mark - 入力関係
 - (NSString *)setNumber:(NSNumber *)value;      //数字用
-- (void)setOperation:(NSString *)value;         //演算子用
+- (NSString*)setOperation:(NSString *)value;    //演算子用
 - (NSString *)setPoint;                         //小数点用
 - (NSString *)turnSign;                         //符号用
 

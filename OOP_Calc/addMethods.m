@@ -34,8 +34,7 @@
 - (NSString *)allClear{
     STATE = initialState;
     arg1 = @0;
-    pointFlag = NO;
-    zeroFlag = YES;
+    [self resetFlags:arg1];
     return [arg1 stringValue];
 }
 
@@ -47,6 +46,26 @@
 // valueについてフラグの確認，修正をするメソッド．addMethods内のみ．
 /*--------------------------------------------*/
 - (void)resetFlags:(NSNumber *)value{
+    NSString *temp = [value stringValue];
+    
+    // 小数点があるかどうか
+    NSRange searchResult = [temp rangeOfString:@"."];
+    if(searchResult.location == NSNotFound){
+        pointFlag = NO;
+    }else{
+        pointFlag = YES;
+    }
+
+    if (pointFlag == NO) {
+        // valueの先頭は0かどうか
+        if([temp hasPrefix:@"0"]){
+            zeroFlag = YES;
+        }else{
+            zeroFlag = NO;
+        }
+    }else {
+        zeroFlag = NO;
+    }
 }
 
 #pragma mark - 入力関係

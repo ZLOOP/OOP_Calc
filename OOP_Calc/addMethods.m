@@ -5,7 +5,15 @@
 
 #import "addMethods.h"
 
+//状態遷移用のマクロ
+#define initialState 0
+#define arg1State 1
+#define opeState 2
+#define arg2State 3
+
 @implementation addMethods{
+    NSInteger STATE;    //現在の状態
+    
     BOOL pointFlag;     //小数点用フラグ
     BOOL zeroFlag;      //先頭の0用フラグ
     
@@ -19,12 +27,12 @@
 /*--------------------------------------------*/
 // allclear
 // 引数:なし
-// 返数:void
+// 返数:NSString *
 //
 // 全てを初期化するメソッド．
 /*--------------------------------------------*/
-- (void)allclear{
-    
+- (NSString *)allclear{
+    return @"0";
 }
 
 /*--------------------------------------------*/

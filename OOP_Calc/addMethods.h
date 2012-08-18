@@ -9,7 +9,7 @@
 }
 
 #pragma mark - 初期化
-- (NSString *)allclear;
+- (NSString *)allClear;
 
 #pragma mark - 入力関係
 - (NSString *)setNumber:(NSNumber *)value;      //数字用

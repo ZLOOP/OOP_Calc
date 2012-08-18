@@ -25,13 +25,13 @@
 #pragma mark - 初期化
 
 /*--------------------------------------------*/
-// allclear
+// allClear
 // 引数:なし
 // 返数:NSString *
 //
 // 全てを初期化するメソッド．
 /*--------------------------------------------*/
-- (NSString *)allclear{
+- (NSString *)allClear{
     STATE = initialState;
     arg1 = @0;
     pointFlag = NO;
@@ -41,14 +41,12 @@
 
 /*--------------------------------------------*/
 // resetFlags
-// 引数:なし
+// 引数:(NSNumber *)value
 // 返数:void
 //
-// フラグの確認，修正をするメソッド．addMethods内のみ．
+// valueについてフラグの確認，修正をするメソッド．addMethods内のみ．
 /*--------------------------------------------*/
-- (void)resetFlags{
-    pointFlag = NO;
-    zeroFlag = YES;
+- (void)resetFlags:(NSNumber *)value{
 }
 
 #pragma mark - 入力関係

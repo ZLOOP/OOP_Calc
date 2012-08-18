@@ -7,8 +7,7 @@
 #import "addMethods.h"
 
 @interface ViewController : UIViewController{
-    //表示用のラベル
-    __weak IBOutlet UILabel *valueViewLabrl;
+    __weak IBOutlet UILabel *valueViewLabrl;    //表示用のラベル
 }
 
 //数字のトリガー

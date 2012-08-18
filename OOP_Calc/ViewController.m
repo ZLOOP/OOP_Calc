@@ -19,21 +19,22 @@
     [super viewDidLoad];
     
     _addMethods = [addMethods alloc];   //メモリの確保
-    
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)viewDidUnload
 {
     valueViewLabrl = nil;
     [super viewDidUnload];
-    // Release any retained subviews of the main view.
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
+
+// ----------------------------------------
+// トリガー
+// ----------------------------------------
 
 - (IBAction)number0Button_down:(id)sender {
 }

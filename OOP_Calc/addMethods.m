@@ -173,7 +173,15 @@
 // arg1 ope arg2 の数式の計算を行うメソッド．
 /*--------------------------------------------*/
 - (NSString *)calculation{
-    return @"0";    
+    NSNumber *temp;
+    if ([ope isEqualToString:@"+"]) temp = @([arg1 doubleValue] + [arg2 doubleValue]);
+    if ([ope isEqualToString:@"-"]) temp = @([arg1 doubleValue] - [arg2 doubleValue]);
+    if ([ope isEqualToString:@"*"]) temp = @([arg1 doubleValue] * [arg2 doubleValue]);
+    if ([ope isEqualToString:@"/"]) temp = @([arg1 doubleValue] / [arg2 doubleValue]);
+    arg1 = temp;
+    [self resetFlags:arg1];
+    STATE = arg1State;
+    return [arg1 stringValue];
 }
 
 

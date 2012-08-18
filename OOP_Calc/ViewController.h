@@ -4,6 +4,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "addMethods.h"
 
 @interface ViewController : UIViewController{
     //表示用のラベル

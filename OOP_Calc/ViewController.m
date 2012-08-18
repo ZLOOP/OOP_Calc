@@ -9,11 +9,17 @@
 
 @end
 
-@implementation ViewController
+@implementation ViewController{
+    addMethods *_addMethods;
+}
 
+//ビューがロードされた時に実行される
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    _addMethods = [addMethods alloc];   //メモリの確保
+    
 	// Do any additional setup after loading the view, typically from a nib.
 }
 

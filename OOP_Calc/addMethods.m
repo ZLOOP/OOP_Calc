@@ -32,7 +32,11 @@
 // 全てを初期化するメソッド．
 /*--------------------------------------------*/
 - (NSString *)allclear{
-    return @"0";
+    STATE = initialState;
+    arg1 = @0;
+    pointFlag = NO;
+    zeroFlag = YES;
+    return [arg1 stringValue];
 }
 
 /*--------------------------------------------*/
@@ -43,7 +47,8 @@
 // フラグの確認，修正をするメソッド．addMethods内のみ．
 /*--------------------------------------------*/
 - (void)resetFlags{
-    
+    pointFlag = NO;
+    zeroFlag = YES;
 }
 
 #pragma mark - 入力関係

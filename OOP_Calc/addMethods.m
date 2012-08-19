@@ -76,13 +76,11 @@
 /*--------------------------------------------*/
 - (NSString *)setNumber:(NSString *)value{
     NSString *temp;
-    NSLog(@"value:%@",value);
-    NSLog(@"pointFlag:%c",pointFlag);
-    NSLog(@"zeroFlag:%c",zeroFlag);
     switch (STATE) {
         case initialState://arg1にvalueで上書き
             arg1 = value;
             temp = arg1;
+            zeroFlag = NO;
             STATE = arg1State;
             break;
             
@@ -109,6 +107,55 @@
     }
     return temp;
 }
+
+/*--------------------------------------------*/
+// setNumber0
+// 引数:(NSNumber *)value
+// 返数:NSString *
+//
+// 0入力に対するメソッド．
+/*--------------------------------------------*/
+- (NSString *)setNumber0:(NSString *)value{
+    NSString *temp;
+    switch (STATE) {
+        case initialState:
+            arg2 = value;
+            temp = arg2;
+            zeroFlag = YES;
+            STATE = initialState;
+            break;
+            
+        case arg1State://arg1とvalueを結合
+            if (zeroFlag == NO) {
+                arg1 = [arg1 stringByAppendingString:value];
+                temp = arg1;
+                STATE = arg1State;
+            }else{
+                temp = arg1;
+            }
+            break;
+            
+        case opeState://arg2にvalueで上書き
+            arg2 = value;
+            temp = arg2;
+            zeroFlag = YES;
+            STATE = arg2State;
+            break;
+            
+        case arg2State://arg2とvalueを結合
+            if (zeroFlag == NO) {
+                arg2 = [arg2 stringByAppendingString:value];
+                temp = arg2;
+                STATE = arg2State;
+            }
+            break;
+            
+        default:
+            break;
+    }
+    return temp;
+}
+
 
 /*--------------------------------------------*/
 // setOperation
@@ -205,6 +252,10 @@
             arg = [arg1 doubleValue];
             arg = (arg * (-1));
             arg1 = [NSString stringWithFormat:@"%f",arg];
+            for (; [[arg1 substringFromIndex:(arg1.length - 1)] isEqualToString:@"0"]; ) {
+                if ([arg1 hasSuffix:@"0"]) arg1 = [arg1 substringToIndex:(arg1.length - 1)];
+                if ([arg1 hasSuffix:@"."]) arg1 = [arg1 substringToIndex:(arg1.length - 1)];
+            }
             temp = arg1;
             break;
             
@@ -216,6 +267,10 @@
             arg = [arg2 doubleValue];
             arg = (arg * (-1));
             arg2 = [NSString stringWithFormat:@"%f",arg];
+            for (; [[arg2 substringFromIndex:(arg2.length - 1)] isEqualToString:@"0"]; ) {
+                if ([arg2 hasSuffix:@"0"]) arg2 = [arg2 substringToIndex:(arg2.length - 1)];
+                if ([arg2 hasSuffix:@"."]) arg2 = [arg2 substringToIndex:(arg2.length - 1)];
+            }
             temp = arg2;
             break;
             

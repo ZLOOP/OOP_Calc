@@ -38,7 +38,7 @@
 // ----------------------------------------
 
 - (IBAction)number0Button_down:(id)sender {
-    valueViewLabrl.text = [_addMethods setNumber:@"0"];
+    valueViewLabrl.text = [_addMethods setNumber0:@"0"];
 }
 
 - (IBAction)number1Button_down:(id)sender {

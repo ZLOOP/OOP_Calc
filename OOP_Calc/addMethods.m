@@ -17,8 +17,8 @@
     BOOL pointFlag;     //小数点用フラグ
     BOOL zeroFlag;      //先頭の0用フラグ
     
-    NSNumber *arg1;     //数字列1用
-    NSNumber *arg2;     //数字列2用
+    NSString *arg1;     //数字列1用
+    NSString *arg2;     //数字列2用
     NSString *ope;      //演算子用
 }
 
@@ -33,23 +33,21 @@
 /*--------------------------------------------*/
 - (NSString *)allClear{
     STATE = initialState;
-    arg1 = @0;
+    arg1 = @"0";
     [self resetFlags:arg1];
-    return [arg1 stringValue];
+    return arg1;
 }
 
 /*--------------------------------------------*/
 // resetFlags
-// 引数:(NSNumber *)value
+// 引数:(NSString *)value
 // 返数:void
 //
 // valueについてフラグの確認，修正をするメソッド．addMethods内のみ．
 /*--------------------------------------------*/
-- (void)resetFlags:(NSNumber *)value{
-    NSString *temp = [value stringValue];
-    
+- (void)resetFlags:(NSString *)value{
     // 小数点があるかどうか
-    NSRange searchResult = [temp rangeOfString:@"."];
+    NSRange searchResult = [value rangeOfString:@"."];
     if(searchResult.location == NSNotFound){
         pointFlag = NO;
     }else{
@@ -58,7 +56,7 @@
 
     if (pointFlag == NO) {
         // valueの先頭は0かどうか
-        if([temp hasPrefix:@"0"]){
+        if([value hasPrefix:@"0"]){
             zeroFlag = YES;
         }else{
             zeroFlag = NO;
@@ -76,30 +74,33 @@
 //
 // 数字入力に対するメソッド．
 /*--------------------------------------------*/
-- (NSString *)setNumber:(NSNumber *)value{
+- (NSString *)setNumber:(NSString *)value{
     NSString *temp;
+    NSLog(@"value:%@",value);
+    NSLog(@"pointFlag:%c",pointFlag);
+    NSLog(@"zeroFlag:%c",zeroFlag);
     switch (STATE) {
         case initialState://arg1にvalueで上書き
             arg1 = value;
-            temp = [arg1 stringValue];
+            temp = arg1;
             STATE = arg1State;
             break;
+            
         case arg1State://arg1とvalueを結合
-            temp = [[arg1 stringValue] stringByAppendingString:[value stringValue]];
-            arg1 = [NSNumber numberWithDouble:[temp doubleValue]]; //FIXME:double型だと，桁数が足りない可能性有り
-            temp = [arg1 stringValue];
+            arg1 = [arg1 stringByAppendingString:value];
+            temp = arg1;
             STATE = arg1State;
             break;
             
         case opeState://arg2にvalueで上書き
             arg2 = value;
-            temp = [arg2 stringValue];
+            temp = arg2;
             STATE = arg2State;
             break;
+            
         case arg2State://arg2とvalueを結合
-            temp = [[arg2 stringValue] stringByAppendingString:[value stringValue]];
-            arg2 = [NSNumber numberWithDouble:[temp doubleValue]]; //FIXME:double型だと，桁数が足りない可能性有り
-            temp = [arg2 stringValue];
+            arg2 = [arg2 stringByAppendingString:value];
+            temp = arg2;
             STATE = arg2State;
             break;
             
@@ -130,14 +131,14 @@
             
         case arg2State:
             temp =[self calculation];
-            [self resetFlags:[NSNumber numberWithDouble:[temp doubleValue]]]; //FIXME:double型だと桁数が足りない可能性有り
+            [self resetFlags:temp];
             break;
             
         default:
             break;
     }
     ope = value;
-    [self resetFlags:@0];
+    [self resetFlags:@"0"];
     STATE = opeState;
     return temp;
 }
@@ -150,7 +151,39 @@
 // 小数点入力に対するメソッド．
 /*--------------------------------------------*/
 - (NSString *)setPoint{
-    return @"0";
+    NSString *temp;
+    
+    if (pointFlag == YES) {
+        return nil;
+    }
+    
+    switch (STATE) {
+        case initialState://arg1にvalueで上書き
+            arg1 = [arg1 stringByAppendingString:@"."];
+            temp = arg1;
+            STATE = arg1State;
+            break;
+        case arg1State://arg1とvalueを結合
+            arg1 = [arg1 stringByAppendingString:@"."];
+            temp = arg1;
+            break;
+            
+        case opeState://arg2にvalueで上書き
+            arg2 = @"0.";
+            temp = arg2;
+            STATE = arg2State;
+            break;
+        case arg2State://arg2とvalueを結合
+            arg2 = [arg2 stringByAppendingString:@"."];
+            temp = arg2;
+            break;
+            
+        default:
+            break;
+    }
+    pointFlag = YES;
+    zeroFlag = NO;
+    return temp;
 }
 
 /*--------------------------------------------*/
@@ -161,23 +194,28 @@
 // +/-入力に対するメソッド．
 /*--------------------------------------------*/
 - (NSString *)turnSign{
-    NSNumber *temp;
+    NSString *temp;
+    double arg;
     switch (STATE) {
-        case initialState://
+        case initialState:
             temp = nil;
             break;
             
-        case arg1State://
-            arg1 = @([arg1 doubleValue] * (-1));
+        case arg1State:
+            arg = [arg1 doubleValue];
+            arg = (arg * (-1));
+            arg1 = [NSString stringWithFormat:@"%f",arg];
             temp = arg1;
             break;
             
-        case opeState://
+        case opeState:
             temp = nil;
             break;
             
-        case arg2State://
-            arg2 = @([arg2 doubleValue] * (-1));
+        case arg2State:
+            arg = [arg2 doubleValue];
+            arg = (arg * (-1));
+            arg2 = [NSString stringWithFormat:@"%f",arg];
             temp = arg2;
             break;
             
@@ -185,7 +223,7 @@
             break;
     }
 
-    return [temp stringValue];
+    return temp;
 }
 
 #pragma mark - その他
@@ -196,16 +234,16 @@
 //
 // arg1 ope arg2 の数式の計算を行うメソッド．
 /*--------------------------------------------*/
-- (NSString *)calculation{
-    NSNumber *temp;
-    if ([ope isEqualToString:@"+"]) temp = @([arg1 doubleValue] + [arg2 doubleValue]);
-    if ([ope isEqualToString:@"-"]) temp = @([arg1 doubleValue] - [arg2 doubleValue]);
-    if ([ope isEqualToString:@"*"]) temp = @([arg1 doubleValue] * [arg2 doubleValue]);
-    if ([ope isEqualToString:@"/"]) temp = @([arg1 doubleValue] / [arg2 doubleValue]);
-    arg1 = temp;
+- (NSString *)calculation{ //FIXME:double型だと桁数が足りない可能性有り
+    double temp;
+    if ([ope isEqualToString:@"+"]) temp = [arg1 doubleValue] + [arg2 doubleValue];
+    if ([ope isEqualToString:@"-"]) temp = [arg1 doubleValue] - [arg2 doubleValue];
+    if ([ope isEqualToString:@"*"]) temp = [arg1 doubleValue] * [arg2 doubleValue];
+    if ([ope isEqualToString:@"/"]) temp = [arg1 doubleValue] / [arg2 doubleValue];
+    arg1 = [NSString stringWithFormat:@"%f",temp];
     [self resetFlags:arg1];
     STATE = arg1State;
-    return [arg1 stringValue];
+    return arg1;
 }
 
 

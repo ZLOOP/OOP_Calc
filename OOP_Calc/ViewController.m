@@ -114,4 +114,5 @@
 - (IBAction)allclearButton_down:(id)sender {
     valueViewLabrl.text = [_addMethods allClear];
 }
+
 @end

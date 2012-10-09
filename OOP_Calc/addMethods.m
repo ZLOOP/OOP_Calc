@@ -10,6 +10,7 @@
 #define arg1State 1
 #define opeState 2
 #define arg2State 3
+#define answer 4
 
 @implementation addMethods{
     NSInteger STATE;    //現在の状態
@@ -49,21 +50,47 @@
     // 小数点があるかどうか
     NSRange searchResult = [value rangeOfString:@"."];
     if(searchResult.location == NSNotFound){
+        //ないとき
         pointFlag = NO;
     }else{
+        //あるとき
         pointFlag = YES;
     }
     
     if (pointFlag == NO) {
-        // valueの先頭は0かどうか
+        // valueの後ろは0かどうか
         if([value hasPrefix:@"0"]){
-            zeroFlag = YES;
-        }else{
             zeroFlag = NO;
+        }else{
+            zeroFlag = YES;
         }
     }else {
         zeroFlag = NO;
     }
+}
+
+#pragma mark - その他
+/*--------------------------------------------*/
+// dropFractions
+// 引数:(NSString *)value
+// 返数:(NSString *)value
+//
+// valueの無駄な0と少数点を消す．addMethods内のみ．
+/*--------------------------------------------*/
+- (NSString *)dropFractions:(NSString *)value{
+    NSLog(@"now");
+    while (pointFlag == YES) {
+        NSLog(@"value:%@",value);
+        if ([value hasSuffix:@"0"]) value = [value substringToIndex:(value.length - 1)];
+        if ([value hasSuffix:@"."]){
+            value = [value substringToIndex:(value.length - 1)];
+            break;
+        }else{
+            break;
+        }
+    }
+    NSLog(@"finish");
+    return value;
 }
 
 #pragma mark - 入力関係
@@ -78,6 +105,7 @@
     NSString *temp;
     switch (STATE) {
         case initialState://arg1にvalueで上書き
+        case answer:
             arg1 = value;
             temp = arg1;
             zeroFlag = NO;
@@ -119,6 +147,7 @@
     NSString *temp;
     switch (STATE) {
         case initialState:
+        case answer:
             arg2 = value;
             temp = arg2;
             zeroFlag = YES;
@@ -147,6 +176,8 @@
                 arg2 = [arg2 stringByAppendingString:value];
                 temp = arg2;
                 STATE = arg2State;
+            }else{
+                temp = arg2;
             }
             break;
             
@@ -181,12 +212,17 @@
             [self resetFlags:temp];
             break;
             
+        case answer:
+            break;
+            
         default:
             break;
     }
     ope = value;
     [self resetFlags:@"0"];
     STATE = opeState;
+    NSLog(@"arg1:%@",arg1);
+    NSLog(@"State = opeState");
     return temp;
 }
 
@@ -224,6 +260,10 @@
             arg2 = [arg2 stringByAppendingString:@"."];
             temp = arg2;
             break;
+        
+        case answer://
+            
+            break;
             
         default:
             break;
@@ -249,13 +289,11 @@
             break;
             
         case arg1State:
+        case answer:
             arg = [arg1 doubleValue];
             arg = (arg * (-1));
             arg1 = [NSString stringWithFormat:@"%f",arg];
-            for (; [[arg1 substringFromIndex:(arg1.length - 1)] isEqualToString:@"0"]; ) {
-                if ([arg1 hasSuffix:@"0"]) arg1 = [arg1 substringToIndex:(arg1.length - 1)];
-                if ([arg1 hasSuffix:@"."]) arg1 = [arg1 substringToIndex:(arg1.length - 1)];
-            }
+            arg1 = [self dropFractions:arg1];
             temp = arg1;
             break;
             
@@ -267,10 +305,7 @@
             arg = [arg2 doubleValue];
             arg = (arg * (-1));
             arg2 = [NSString stringWithFormat:@"%f",arg];
-            for (; [[arg2 substringFromIndex:(arg2.length - 1)] isEqualToString:@"0"]; ) {
-                if ([arg2 hasSuffix:@"0"]) arg2 = [arg2 substringToIndex:(arg2.length - 1)];
-                if ([arg2 hasSuffix:@"."]) arg2 = [arg2 substringToIndex:(arg2.length - 1)];
-            }
+            arg2 = [self dropFractions:arg2];
             temp = arg2;
             break;
             
@@ -290,18 +325,25 @@
 // arg1 ope arg2 の数式の計算を行うメソッド．
 /*--------------------------------------------*/
 - (NSString *)calculation{ //FIXME:double型だと桁数が足りない可能性有り
+    NSLog(@"%@ %@ %@",arg1,ope, arg2);
+
     double temp;
-    if ([ope isEqualToString:@"+"]) temp = [arg1 doubleValue] + [arg2 doubleValue];
-    if ([ope isEqualToString:@"-"]) temp = [arg1 doubleValue] - [arg2 doubleValue];
-    if ([ope isEqualToString:@"*"]) temp = [arg1 doubleValue] * [arg2 doubleValue];
-    if ([ope isEqualToString:@"/"]) temp = [arg1 doubleValue] / [arg2 doubleValue];
-    arg1 = [NSString stringWithFormat:@"%f",temp];
-    for (; [[arg1 substringFromIndex:(arg1.length - 1)] isEqualToString:@"0"]; ) {
-        if ([arg1 hasSuffix:@"0"]) arg1 = [arg1 substringToIndex:(arg1.length - 1)];
-        if ([arg1 hasSuffix:@"."]) arg1 = [arg1 substringToIndex:(arg1.length - 1)];
+    if (ope == nil) {
+    }else{
+        if ([ope isEqualToString:@"+"]) temp = [arg1 doubleValue] + [arg2 doubleValue];
+        if ([ope isEqualToString:@"-"]) temp = [arg1 doubleValue] - [arg2 doubleValue];
+        if ([ope isEqualToString:@"*"]) temp = [arg1 doubleValue] * [arg2 doubleValue];
+        if ([ope isEqualToString:@"/"]) temp = [arg1 doubleValue] / [arg2 doubleValue];
+        arg1 = [NSString stringWithFormat:@"%f",temp];
     }
     [self resetFlags:arg1];
-    STATE = arg1State;
+    arg1 = [self dropFractions:arg1];
+    [self resetFlags:arg1];
+    ope = nil;
+    arg2 = nil;
+    STATE = answer;
+    
+    NSLog(@"answer:%@",arg1);
     return arg1;
 }
 
